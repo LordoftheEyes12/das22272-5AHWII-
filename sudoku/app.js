@@ -158,7 +158,7 @@ async function writeSolvedSudoku(solvedSudoku) {
 
 async function readAndParseSudoku() {
 	try {
-		const inputPath = join(__dirname, "unsolvedSudoku5.json");
+		const inputPath = join(__dirname, "unsolvedSudoku4.json");
 		const jsonData = await readFile(inputPath, "utf-8");
 
 		// Parse the JSON data into a 2-dimensional array
