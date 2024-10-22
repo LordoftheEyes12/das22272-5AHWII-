@@ -20,7 +20,7 @@
     background-color: #00a0a0; 
     color: #00a0a0;
 }
-/* 10.91.1.55 */
+
 html
 {
     background-color: #222222;
@@ -32,8 +32,8 @@ html
     font-size: 24px;
     text-align: center;
     line-height: 100px;
-    border: 2px solid #00a0a0; /* Thicker border for cells */
-    border-radius: 8px; /* Rounded corners for each cell */
+    border: 2px solid #00a0a0; 
+    border-radius: 8px;
     cursor: pointer;
     color: 0ff;
     background-color: #222222; 
@@ -46,12 +46,12 @@ html
 }
 
 .cell:active {
-    background-color: #b2ebf2; /* Darker color when cell is clicked */
+    background-color: #b2ebf2;
 }
 
 .info {
     margin-top: 20px;
-    text-align: center; /* Center align the text */
+    text-align: center; 
     font-family: 'Arial', sans-serif;
     font-size: 20px;
     color: #00a0a0;
@@ -69,15 +69,15 @@ button {
     transition: background-color 0.3s ease;
     display: block;
     margin-left: auto;
-    margin-right: auto; /* Center align the button */
+    margin-right: auto; 
 }
 
 button:hover {
-    background-color: #004d40; /* Darker color on hover */
+    background-color: #004d40; 
 }
 
 button:active {
-    background-color: #00251a; /* Even darker on click */
+    background-color: #00251a; 
 }
 
 
@@ -86,13 +86,13 @@ button:active {
 <body>
  
     
-    <!-- Player and Turn Information -->
+
     <div class="info">
         <p><strong>Your Player ID:</strong> <span id="playerIdDisplay">Waiting for server...</span></p>
         <p><strong>Current Turn:</strong> <span id="turnDisplay">Waiting for server...</span></p>
     </div>
 
-    <!-- Tic-Tac-Toe Grid -->
+  
     <div id="ticTacToeGrid" class="grid">
         <div class="cell" data-cell></div>
         <div class="cell" data-cell></div>
@@ -108,16 +108,16 @@ button:active {
 
     <script>
         const grid = document.querySelectorAll('[data-cell]');
-        let playerid;  // Player ID assigned by server
+        let playerid;  
         let fieldContent;
         
-        let turn = 0;  // Tracks whose turn it is
+        let turn = 0;  
         let socket;
 
         const playerIdDisplay = document.getElementById('playerIdDisplay');
         const turnDisplay = document.getElementById('turnDisplay');
 
-        // WebSocket connection and handlers
+        
         function initWebSocket() {
             socket = new WebSocket("ws://localhost:3741/ws");
 
@@ -130,7 +130,7 @@ button:active {
                 const data = JSON.parse(event.data);
 
                 if (data.playerNumber) {
-                    playerid = data.playerNumber;  // Set the player's ID when received from the server
+                    playerid = data.playerNumber;  
                     playerIdDisplay.textContent = playerid; 
                     if(playerid === 1)
                     {
@@ -150,32 +150,32 @@ button:active {
                 if (data.turn !== undefined) {
                     turn = data.turn;
                     if (turn === 91) {
-                        // Show Game Over if the turn is 99
+                        
                         turnDisplay.textContent = "Player 1 won";
                         console.log("Game Over. Player 1 won");
-                        removeCellClickHandlers();  // Disable further clicks after game over
+                        removeCellClickHandlers();  
                     }
                     else if (turn === 92){
-                        // Show Game Over if the turn is 92
+                        
                         turnDisplay.textContent = "Player 2 won";
                         console.log("Game Over. Player 2 won");
-                        removeCellClickHandlers();  // Disable further clicks after game over
+                        removeCellClickHandlers();  
                     }
                     else if (turn === 99){
-                        // Show Game Over if the turn is 93
+                        
                         turnDisplay.textContent = "Draw";
                         console.log("Game Over. Draw");
-                        removeCellClickHandlers();  // Disable further clicks after game over
+                        removeCellClickHandlers(); 
                     }
                     else {
-                        // Display the current turn
+                        
                         turnDisplay.textContent = turn === playerid ? "Your Turn" : `Player ${turn}'s Turn`;
                         console.log(`Turn received: Player ${turn}`);
                     }
                 }
 
                 if (data.field) {
-                    writeJsonToField(JSON.stringify(data));  // Update the grid with received field data
+                    writeJsonToField(JSON.stringify(data));  
                 }
             };
 
@@ -184,27 +184,27 @@ button:active {
             };
         }
 
-        // Initialize WebSocket when page loads
+        
         window.onload = function() {
             initWebSocket();
-            addCellClickHandlers();  // Add click handlers after the grid is set up
+            addCellClickHandlers();  
         };
 
-        // Function to handle cell clicks
+        
         function addCellClickHandlers() {
             grid.forEach((cell, index) => {
-                cell.addEventListener('click', handleClick);  // Bind the click handler
+                cell.addEventListener('click', handleClick); 
             });
         }
 
-        // Function to remove click handlers after game is over
+        
         function removeCellClickHandlers() {
             grid.forEach((cell, index) => {
-                cell.removeEventListener('click', handleClick);  // Unbind the click handler
+                cell.removeEventListener('click', handleClick);  
             });
         }
 
-        // Handle individual cell click events
+        
         function handleClick(event) {
             const cell = event.target;
             const index = Array.from(grid).indexOf(cell);
@@ -219,14 +219,14 @@ button:active {
                 console.log(`Player ${playerid} clicked and it's their turn`);
                 cell.textContent = fieldContent;
                 ;
-                const fullGridData = createData();  // Send full grid data after the move
+                const fullGridData = createData(); 
                 sendFullGridData(fullGridData);
             } else {
                 console.log("Cell already filled");
             }
         }
 
-        // Function to create a full grid data representation
+        
         function createData() {
             const gridData = {};
             grid.forEach((cell, index) => {
@@ -236,20 +236,20 @@ button:active {
             return JSON.stringify({ field: gridData });
         }
 
-        // Function to write JSON data into the grid
+       
         function writeJsonToField(jsonData) {
             const data = JSON.parse(jsonData);
             Object.keys(data.field).forEach(cellName => {
                 const index = parseInt(cellName.slice(1), 10) - 1;
                 grid[index].textContent = data.field[cellName].trim();
             });
-            addCellClickHandlers();  // Reapply click handlers after updating the grid from server
+            addCellClickHandlers();  
         }
 
-        // Function to send the full grid data to the server
+       
         function sendFullGridData(gridData) {
             console.log(gridData + " sent to server");
-            socket.send(gridData);  // Send the full grid data to the server
+            socket.send(gridData);  
         }
     
 

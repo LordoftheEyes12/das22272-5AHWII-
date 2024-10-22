@@ -1,4 +1,4 @@
-//import { reset } from "https://deno.land/std@0.106.0/fmt/colors.ts";
+
 import { serve } from "https://deno.land/std@0.106.0/http/server.ts";
 import { acceptWebSocket, isWebSocketCloseEvent } from "https://deno.land/std@0.106.0/ws/mod.ts";
 
@@ -25,7 +25,7 @@ let currTurn: number = 0;
 
 console.log(`HTTP webserver running. Access it at:  http://localhost:${port}/`);
 
-const players = new Map<number, WebSocket>(); // Map to hold player WebSocket connections
+const players = new Map<number, WebSocket>(); 
 
 for await (const req of server) {
   if (req.url === "/ws") {
@@ -55,17 +55,16 @@ type Message = { turn: number, field: string };
 async function handleSocket(sock: WebSocket) {
   console.log("Socket connected!");
 
-  // Assign a player number based on connection order
+
   const playerId = players.size + 1;
   players.set(playerId, sock);
 
-  // Send each player their player number
   await sock.send(JSON.stringify({ playerNumber: playerId }));
 
   if (players.size === 2) {
     console.log("Both players connected, starting the game!");
 
-    // Broadcast initial state to both players
+    
     const initialMessage: Message = { turn: 1, field: JSON.stringify(field) };
     for (const playerSock of players.values()) {
       await playerSock.send(JSON.stringify(initialMessage));
@@ -157,7 +156,7 @@ function checkField(field: board, intitialField: board){
     {
         console.log(differences);
         console.log("illegal move");
-        return 16; //more than one field was changed
+        return 16; 
     }
 
   
