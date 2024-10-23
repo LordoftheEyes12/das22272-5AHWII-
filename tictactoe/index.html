@@ -104,7 +104,7 @@ button:active {
         <div class="cell" data-cell></div>
         <div class="cell" data-cell></div>
     </div>
-
+    <!--<button onclick="socket.send(JSON.stringify({ reset: true }))">Reset Game</button>-->
 
     <script>
         const grid = document.querySelectorAll('[data-cell]');
@@ -119,7 +119,8 @@ button:active {
 
         
         function initWebSocket() {
-            socket = new WebSocket("ws://localhost:3741/ws");
+            const ipaddress = window.location.host;
+            socket = new WebSocket(`ws://${ipaddress}/ws`);
 
             socket.onopen = () => {
                 console.log("Connected to the server");
@@ -142,9 +143,13 @@ button:active {
                     }
                     else 
                     {
-                        console.log("no sybol avaliable for player 3");
+                        console.log("no symbol avaliable for player 3");
                     }
                     console.log(`Player ID received: ${playerid}`);
+            
+                }
+                if (data.error){
+                    alert(data.error);
                 }
 
                 if (data.turn !== undefined) {
@@ -176,6 +181,18 @@ button:active {
 
                 if (data.field) {
                     writeJsonToField(JSON.stringify(data));  
+                }
+                if (data.reset === true) {
+                    const grid = document.querySelectorAll('[data-cell]');
+                    //removeCellClickHandlers();
+                    console.log("Game reset");
+                    grid.forEach((cell, index) => {
+                        cell.textContent = '';
+                    });
+                    addCellClickHandlers();
+                    
+                    //const fullGridData = createData(); 
+                    //sendFullGridData(fullGridData);
                 }
             };
 
@@ -239,6 +256,7 @@ button:active {
        
         function writeJsonToField(jsonData) {
             const data = JSON.parse(jsonData);
+            console.log(data);
             Object.keys(data.field).forEach(cellName => {
                 const index = parseInt(cellName.slice(1), 10) - 1;
                 grid[index].textContent = data.field[cellName].trim();

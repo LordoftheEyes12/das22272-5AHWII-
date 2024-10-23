@@ -5,6 +5,7 @@ import { acceptWebSocket, isWebSocketCloseEvent } from "https://deno.land/std@0.
 const port = 3741;
 const server = serve({ port });
 
+
 let boards = {
   f1: " ",
   f2: " ",
@@ -22,7 +23,7 @@ let field: board;
 let winCombination : number = 0;
 let turn: number = 1;
 let currTurn: number = 0;
-
+let reset: boolean = false;
 console.log(`HTTP webserver running. Access it at:  http://localhost:${port}/`);
 
 const players = new Map<number, WebSocket>(); 
@@ -54,7 +55,12 @@ type Message = { turn: number, field: string };
 
 async function handleSocket(sock: WebSocket) {
   console.log("Socket connected!");
-
+  if (players.size >= 2) {
+    await sock.send(JSON.stringify({ error: "Game is full. Only two players are allowed." }));
+    sock.close();
+    return;
+  }
+  
 
   const playerId = players.size + 1;
   players.set(playerId, sock);
@@ -79,6 +85,22 @@ async function handleSocket(sock: WebSocket) {
         turn = playerId;      
         
         const value = JSON.parse(ev);
+        try {
+          if (value.reset === true && winCombination !== 0){
+            resetGame();
+            const message: Message = { turn: 1, field: JSON.stringify(field) };
+            for (const playerSock of players.values())
+            {
+                await playerSock.send(JSON.stringify(message));
+            }
+            reset = false;
+            continue;
+          }
+        } catch (error) {
+          console.log("error");
+          
+        }
+       
         const cache = checkField(value.field, boards);
         console.log(cache);
         console.log(winCombination);
@@ -243,4 +265,27 @@ function checkDraw(strings: string[]): boolean
   console.log("draw condition met");
   winCombination = 99;
   return true;
+}
+
+async function resetGame(){
+  field = {
+    f1: " ",
+    f2: " ",
+    f3: " ",
+    f4: " ",
+    f5: " ",
+    f6: " ",
+    f7: " ",
+    f8: " ",
+    f9: " ",
+  };
+  winCombination = 0;
+  turn = 1;
+  currTurn = 1;
+  reset = true;
+  const message = {reset: true};
+  for (const playerSock of players.values())
+    {
+        await playerSock.send(JSON.stringify(message));
+    }
 }
