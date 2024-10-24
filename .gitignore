@@ -2,3 +2,7 @@
 
 /tictactoe/brutal.html
 /tictactoe/new.ts
+
+/cookies/node_modules
+/cookies/prisma/dev.db
+/cookies/.env
