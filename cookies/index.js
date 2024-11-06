@@ -1,5 +1,5 @@
 const { createHash } = require('crypto');
-//import { PrismaClient } from '@prisma/client'
+
 const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient()
@@ -9,7 +9,7 @@ var express = require("express"),
   app = express(),
   MemcachedStore = require("connect-memcached")(session);
 
-// Use body-parser to parse JSON and URL-encoded bodies
+
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(
@@ -47,7 +47,6 @@ app.post("/login", async function(req, res) {
 
 // Route to display the number of views and username
 app.get("/", function(req, res) {
- 
   res.sendFile(`${__dirname}/index.html`);
 });
 
@@ -90,9 +89,9 @@ app.listen(9341, function() {
   console.log("Listening on %d", this.address().port);
 });
 
+
 async function authenticateUser(username, password) {
 
- 
  useablePwd = createHash('sha256').update(password).digest('hex'); 
  console.log(useablePwd);
  let something = 0;
@@ -108,7 +107,6 @@ async function authenticateUser(username, password) {
         something = 1;
         return false;
     }}
-    //console.log(JSON.parse(information));
     console.log(information.username);
  } catch (error) {
     console.log("something went wrong "+error);
