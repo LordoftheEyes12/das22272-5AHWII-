@@ -29,15 +29,15 @@ app.use(
   })
 );
 
-// Route to handle login
+
 app.post("/login", async function(req, res) {
-  const { username, password } = req.body;  // Get username and password from request
-  //console.log(Hash('sha256').update(password).digest('hex'));
+  const { username, password } = req.body;  
+  
   const check = await authenticateUser(username, password);
-    console.log(check);
+    // console.log(check);
   if (check) {
-    req.session.username = username;  // Store username in session
-    req.session.isAuthenticated = true;  // Add flag to indicate successful login
+    req.session.username = username;
+    req.session.isAuthenticated = true; 
     res.send(`Login erfolgreich. Willkommen, ${username}!<br><a href="/memberbereich">Memberbereich</a><br><a href="/logout">Logout</a><br><a href="/">Home</a>`);
 
   } else {
@@ -45,14 +45,14 @@ app.post("/login", async function(req, res) {
   }
 });
 
-// Route to display the number of views and username
+
 app.get("/", function(req, res) {
  
   res.sendFile(`${__dirname}/index.html`);
 });
 
 app.post("/register", function(req, res) {
-    const { username, password } = req.body;  // Get username and password from request
+    const { username, password } = req.body; 
 
     createUser(username, password);
  
@@ -75,7 +75,7 @@ app.get("/loginpage", function(req, res) {
     res.sendFile(`${__dirname}/login.html`);
 });
 
-// Logout route to destroy session
+
 app.get("/logout", function(req, res) {
   req.session.destroy(function(err) {
     if (err) {
@@ -85,7 +85,6 @@ app.get("/logout", function(req, res) {
   });
 });
 
-// Start the server
 app.listen(9341, function() {
   console.log("Listening on %d", this.address().port);
 });
@@ -94,7 +93,7 @@ async function authenticateUser(username, password) {
 
  
  useablePwd = createHash('sha256').update(password).digest('hex'); 
- console.log(useablePwd);
+ //console.log(useablePwd);
  let something = 0;
  try {
     const information = await prisma.userdata.findFirst({
@@ -102,14 +101,13 @@ async function authenticateUser(username, password) {
           username: username,
           password: useablePwd
         }});
-    console.log(information);
+    //console.log(information);
     if (information === null) { {
         console.log("User not found");
         something = 1;
         return false;
     }}
-    //console.log(JSON.parse(information));
-    console.log(information.username);
+    
  } catch (error) {
     console.log("something went wrong "+error);
  }
