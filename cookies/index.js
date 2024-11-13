@@ -24,7 +24,7 @@ app.use(
       secret: "123, easy as ABC. ABC, easy as 123" // Memcached session encryption
     }),
     cookie: {
-      maxAge: 86400000  // Cookie expiry time (1 day)
+      maxAge: 60000000, 
     }
   })
 );
