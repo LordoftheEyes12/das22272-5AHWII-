@@ -1,9 +1,22 @@
+#Sudoku Folder
 /sudoku/node_modules
 
+#Tictactoe Folder
 /tictactoe/brutal.html
 /tictactoe/new.ts
 
+#Cookies Folder
 /cookies/node_modules
 /cookies/prisma/dev.db
 /cookies/.env
-/editor
+/cookies/prisma/what.txt
+/cookies/prisma/apfel.txt
+/cookies/prisma/text.sql
+
+#SQL folder
+/sql/node_modules
+/sql/dev.db
+/sql/.env
+/sql/new.sql
+/sql/query.sql
+

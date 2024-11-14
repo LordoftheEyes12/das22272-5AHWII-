@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model categories {
+  CategoryID   Int        @id
+  CategoryName String?
+  Description  String?
+  products     products[]
+}
+
+model customers {
+  CustomerID   Int      @id
+  CustomerName String?
+  ContactName  String?
+  Address      String?
+  City         String?
+  PostalCode   String?
+  Country      String?
+  orders       orders[]
+}
+
+model employees {
+  EmployeeID Int       @id
+  LastName   String?
+  FirstName  String?
+  BirthDate  DateTime?
+  Photo      String?
+  Notes      String?
+  orders     orders[]
+}
+
+model order_details {
+  OrderDetailID Int       @id
+  OrderID       Int?
+  ProductID     Int?
+  Quantity      Int?
+  products      products? @relation(fields: [ProductID], references: [ProductID], onDelete: NoAction, onUpdate: NoAction)
+  orders        orders?   @relation(fields: [OrderID], references: [OrderID], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model orders {
+  OrderID       Int             @id
+  CustomerID    Int?
+  EmployeeID    Int?
+  OrderDate     DateTime?
+  ShipperID     Int?
+  order_details order_details[]
+  shippers      shippers?       @relation(fields: [ShipperID], references: [ShipperID], onDelete: NoAction, onUpdate: NoAction)
+  employees     employees?      @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: NoAction, onUpdate: NoAction)
+  customers     customers?      @relation(fields: [CustomerID], references: [CustomerID], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model products {
+  ProductID     Int             @id
+  ProductName   String?
+  SupplierID    Int?
+  CategoryID    Int?
+  Unit          String?
+  Price         Float?
+  order_details order_details[]
+  suppliers     suppliers?      @relation(fields: [SupplierID], references: [SupplierID], onDelete: NoAction, onUpdate: NoAction)
+  categories    categories?     @relation(fields: [CategoryID], references: [CategoryID], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model shippers {
+  ShipperID   Int      @id
+  ShipperName String?
+  Phone       String?
+  orders      orders[]
+}
+
+model suppliers {
+  SupplierID   Int        @id
+  SupplierName String?
+  ContactName  String?
+  Address      String?
+  City         String?
+  PostalCode   String?
+  Country      String?
+  Phone        String?
+  products     products[]
+}

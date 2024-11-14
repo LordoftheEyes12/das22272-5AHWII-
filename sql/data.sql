@@ -17,7 +17,7 @@
 
 
 CREATE TABLE `categories` (
-  `CategoryID` int(11) NOT NULL PRIMARY KEY,
+  `CategoryID` INT NOT NULL UNIQUE PRIMARY KEY ,
   `CategoryName` varchar(255) DEFAULT NULL,
   `Description` varchar(255) DEFAULT NULL
 ); 
@@ -43,7 +43,7 @@ INSERT INTO `categories` (`CategoryID`, `CategoryName`, `Description`) VALUES
 --
 
 CREATE TABLE `customers` (
-  `CustomerID` int(11) NOT NULL,
+  `CustomerID` INT NOT NULL UNIQUE PRIMARY KEY,
   `CustomerName` varchar(255) DEFAULT NULL,
   `ContactName` varchar(255) DEFAULT NULL,
   `Address` varchar(255) DEFAULT NULL,
@@ -156,7 +156,7 @@ INSERT INTO `customers` (`CustomerID`, `CustomerName`, `ContactName`, `Address`,
 --
 
 CREATE TABLE `employees` (
-  `EmployeeID` int(11) NOT NULL,
+  `EmployeeID` INT NOT NULL UNIQUE PRIMARY KEY,
   `LastName` varchar(255) DEFAULT NULL,
   `FirstName` varchar(255) DEFAULT NULL,
   `BirthDate` date DEFAULT NULL,
@@ -186,11 +186,14 @@ INSERT INTO `employees` (`EmployeeID`, `LastName`, `FirstName`, `BirthDate`, `Ph
 --
 
 CREATE TABLE `orders` (
-  `OrderID` int(11) NOT NULL,
-  `CustomerID` int(11) DEFAULT NULL,
-  `EmployeeID` int(11) DEFAULT NULL,
+  `OrderID` INT NOT NULL UNIQUE PRIMARY KEY,
+  `CustomerID` INT DEFAULT NULL,
+  `EmployeeID` INT DEFAULT NULL,
   `OrderDate` date DEFAULT NULL,
-  `ShipperID` int(11) DEFAULT NULL
+  `ShipperID` INT DEFAULT NULL,
+FOREIGN KEY (`CustomerID`) REFERENCES `customers` (`CustomerID`),
+FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`),
+FOREIGN KEY (`ShipperID`) REFERENCES `shippers` (`ShipperID`)
 ) ;
 
 --
@@ -402,10 +405,12 @@ INSERT INTO `orders` (`OrderID`, `CustomerID`, `EmployeeID`, `OrderDate`, `Shipp
 --
 
 CREATE TABLE `order_details` (
-  `OrderDetailID` int(11) NOT NULL,
-  `OrderID` int(11) DEFAULT NULL,
-  `ProductID` int(11) DEFAULT NULL,
-  `Quantity` int(11) DEFAULT NULL
+  `OrderDetailID` INT NOT NULL UNIQUE PRIMARY KEY,
+  `OrderID` INT DEFAULT NULL,
+  `ProductID` INT DEFAULT NULL,
+  `Quantity` INT DEFAULT NULL,
+  FOREIGN KEY (`OrderID`) REFERENCES `orders` (`OrderID`),
+FOREIGN KEY (`ProductID`) REFERENCES `products` (`ProductID`)
 ) ;
 
 --
@@ -939,12 +944,14 @@ INSERT INTO `order_details` (`OrderDetailID`, `OrderID`, `ProductID`, `Quantity`
 --
 
 CREATE TABLE `products` (
-  `ProductID` int(11) NOT NULL,
+  `ProductID` INT NOT NULL UNIQUE PRIMARY KEY,
   `ProductName` varchar(255) DEFAULT NULL,
-  `SupplierID` int(11) DEFAULT NULL,
-  `CategoryID` int(11) DEFAULT NULL,
+  `SupplierID` INT DEFAULT NULL,
+  `CategoryID` INT DEFAULT NULL,
   `Unit` varchar(255) DEFAULT NULL,
-  `Price` double DEFAULT NULL
+  `Price` double DEFAULT NULL,
+  FOREIGN KEY (`CategoryID`) REFERENCES `categories` (`CategoryID`),
+FOREIGN KEY (`SupplierID`) REFERENCES `suppliers` (`SupplierID`)
 );
 
 --
@@ -1037,7 +1044,7 @@ INSERT INTO `products` (`ProductID`, `ProductName`, `SupplierID`, `CategoryID`, 
 --
 
 CREATE TABLE `shippers` (
-  `ShipperID` int(11) NOT NULL,
+  `ShipperID` INT NOT NULL UNIQUE PRIMARY KEY,
   `ShipperName` varchar(255) DEFAULT NULL,
   `Phone` varchar(255) DEFAULT NULL
 ) ;
@@ -1058,7 +1065,7 @@ INSERT INTO `shippers` (`ShipperID`, `ShipperName`, `Phone`) VALUES
 --
 
 CREATE TABLE `suppliers` (
-  `SupplierID` int(11) NOT NULL,
+  `SupplierID` INT NOT NULL UNIQUE PRIMARY KEY,
   `SupplierName` varchar(255) DEFAULT NULL,
   `ContactName` varchar(255) DEFAULT NULL,
   `Address` varchar(255) DEFAULT NULL,
@@ -1103,141 +1110,26 @@ INSERT INTO `suppliers` (`SupplierID`, `SupplierName`, `ContactName`, `Address`,
 (28, 'Gai pâturage', 'Eliane Noz', 'Bat. B 3, rue des Alpes', 'Annecy', '74000', 'France', '38.76.98.06'),
 (29, 'Forêts dérables', 'Chantal Goulet', '148 rue Chasseur', 'Ste-Hyacinthe', 'J2S 7S8', 'Canada', '(514) 555-2955');
 
---
--- Indexes for dumped tables
---
 
---
--- Indexes for table `categories`
---
-
---
--- Indexes for table `customers`
---
-ALTER TABLE `customers`
-  ADD PRIMARY KEY (`CustomerID`);
-
---
--- Indexes for table `employees`
---
-ALTER TABLE `employees`
-  ADD PRIMARY KEY (`EmployeeID`);
-
---
--- Indexes for table `orders`
---
-ALTER TABLE `orders`
-  ADD PRIMARY KEY (`OrderID`),
-  ADD KEY `CustomerID` (`CustomerID`),
-  ADD KEY `EmployeeID` (`EmployeeID`),
-  ADD KEY `ShipperID` (`ShipperID`);
-
---
--- Indexes for table `order_details`
---
-ALTER TABLE `order_details`
-  ADD PRIMARY KEY (`OrderDetailID`),
-  ADD KEY `OrderID` (`OrderID`),
-  ADD KEY `ProductID` (`ProductID`);
-
---
--- Indexes for table `products`
---
-ALTER TABLE `products`
-  ADD PRIMARY KEY (`ProductID`),
-  ADD KEY `CategoryID` (`CategoryID`),
-  ADD KEY `SupplierID` (`SupplierID`);
-
---
--- Indexes for table `shippers`
---
-ALTER TABLE `shippers`
-  ADD PRIMARY KEY (`ShipperID`);
-
---
--- Indexes for table `suppliers`
---
-ALTER TABLE `suppliers`
-  ADD PRIMARY KEY (`SupplierID`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `categories`
---
-ALTER TABLE `categories`
-  MODIFY `CategoryID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `customers`
---
-ALTER TABLE `customers`
-  MODIFY `CustomerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
-
---
--- AUTO_INCREMENT for table `employees`
---
-ALTER TABLE `employees`
-  MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `orders`
---
-ALTER TABLE `orders`
-  MODIFY `OrderID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10444;
-
---
--- AUTO_INCREMENT for table `order_details`
---
-ALTER TABLE `order_details`
-  MODIFY `OrderDetailID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=519;
-
---
--- AUTO_INCREMENT for table `products`
---
-ALTER TABLE `products`
-  MODIFY `ProductID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
-
---
--- AUTO_INCREMENT for table `shippers`
---
-ALTER TABLE `shippers`
-  MODIFY `ShipperID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `suppliers`
---
-ALTER TABLE `suppliers`
-  MODIFY `SupplierID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `orders`
---
-ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`CustomerID`) REFERENCES `customers` (`CustomerID`),
-  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`),
-  ADD CONSTRAINT `orders_ibfk_3` FOREIGN KEY (`ShipperID`) REFERENCES `shippers` (`ShipperID`);
+--ALTER TABLE `orders`
+  --ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`CustomerID`) REFERENCES `customers` (`CustomerID`),
+  --ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`),
+  --ADD CONSTRAINT `orders_ibfk_3` FOREIGN KEY (`ShipperID`) REFERENCES `shippers` (`ShipperID`);
 
 --
 -- Constraints for table `order_details`
 --
-ALTER TABLE `order_details`
-  ADD CONSTRAINT `order_details_ibfk_1` FOREIGN KEY (`OrderID`) REFERENCES `orders` (`OrderID`),
-  ADD CONSTRAINT `order_details_ibfk_2` FOREIGN KEY (`ProductID`) REFERENCES `products` (`ProductID`);
+--ALTER TABLE `order_details`
+  --ADD CONSTRAINT `order_details_ibfk_1` FOREIGN KEY (`OrderID`) REFERENCES `orders` (`OrderID`),
+  --ADD CONSTRAINT `order_details_ibfk_2` FOREIGN KEY (`ProductID`) REFERENCES `products` (`ProductID`);
 
 --
 -- Constraints for table `products`
 --
-ALTER TABLE `products`
-  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`CategoryID`) REFERENCES `categories` (`CategoryID`),
-  ADD CONSTRAINT `products_ibfk_2` FOREIGN KEY (`SupplierID`) REFERENCES `suppliers` (`SupplierID`);
-COMMIT;
+--ALTER TABLE `products`
+  --ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`CategoryID`) REFERENCES `categories` (`CategoryID`),
+  --ADD CONSTRAINT `products_ibfk_2` FOREIGN KEY (`SupplierID`) REFERENCES `suppliers` (`SupplierID`);
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
