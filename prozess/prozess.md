@@ -10,3 +10,20 @@ pid: Process ID
 ppid: Parent Porcess ID
 
 Signale: werden an Prozesse gesendet. Mit dem Befehl `kill`
+
+## filehandles
+
+Jeder Prozess hat zu beginn 3 offene filehandles
+
+- stdin (read-only)
+- stdout (write-only)
+- stderr (write-only)
+
+## Environment
+env
+deno: process.env
+
+## args
+ist ein String array. 
+
+Umleitung '> filename' bzw stderr '2 > filename'
