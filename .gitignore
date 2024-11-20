@@ -19,6 +19,9 @@
 /sql/.env
 /sql/new.sql
 /sql/query.sql
+/sql/*.sqlite3
+/sql/*.db
+/sql/nodata.sql
 
 /randomshit
 das22272-5AHWII-.sln
