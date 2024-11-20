@@ -26,9 +26,9 @@ CREATE TABLE `orders` (
   `EmployeeID` INT DEFAULT NULL,
   `OrderDate` date DEFAULT NULL,
   `ShipperID` INT DEFAULT NULL,
-  FOREIGN KEY (`CustomerID`) REFERENCES `customers` (`CustomerID`),
-  FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`),
-  FOREIGN KEY (`ShipperID`) REFERENCES `shippers` (`ShipperID`)
+FOREIGN KEY (`CustomerID`) REFERENCES `customers` (`CustomerID`),
+FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`),
+FOREIGN KEY (`ShipperID`) REFERENCES `shippers` (`ShipperID`)
 );
 CREATE TABLE `order_details` (
   `OrderDetailID` INT NOT NULL UNIQUE PRIMARY KEY,
@@ -36,7 +36,7 @@ CREATE TABLE `order_details` (
   `ProductID` INT DEFAULT NULL,
   `Quantity` INT DEFAULT NULL,
   FOREIGN KEY (`OrderID`) REFERENCES `orders` (`OrderID`),
-  FOREIGN KEY (`ProductID`) REFERENCES `products` (`ProductID`)
+FOREIGN KEY (`ProductID`) REFERENCES `products` (`ProductID`)
 );
 CREATE TABLE `products` (
   `ProductID` INT NOT NULL UNIQUE PRIMARY KEY,
@@ -46,7 +46,7 @@ CREATE TABLE `products` (
   `Unit` varchar(255) DEFAULT NULL,
   `Price` double DEFAULT NULL,
   FOREIGN KEY (`CategoryID`) REFERENCES `categories` (`CategoryID`),
-  FOREIGN KEY (`SupplierID`) REFERENCES `suppliers` (`SupplierID`)
+FOREIGN KEY (`SupplierID`) REFERENCES `suppliers` (`SupplierID`)
 );
 CREATE TABLE `shippers` (
   `ShipperID` INT NOT NULL UNIQUE PRIMARY KEY,
