@@ -4,5 +4,4 @@ FROM products INNER JOIN order_details on order_details.ProductID = products.Pro
               INNER JOIN orders on orders.OrderID = order_details.OrderID
               INNER JOIN customers on orders.CustomerID = customers.CustomerID
 WHERE customers.CustomerID BETWEEN 1 AND 10
---GROUP BY categories.CategoryID 
 ORDER BY orders.OrderID;
