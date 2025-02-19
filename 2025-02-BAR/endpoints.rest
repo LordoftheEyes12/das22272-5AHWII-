@@ -1,0 +1,7 @@
+GET http://localhost:3000/menu
+###
+
+POST http://localhost:3000/register
+Content-Type: application/json
+
+{"name":"Ben Daschner","email":"ben@daschner.at","password":"Apfelsaft"}
