@@ -10,8 +10,8 @@ const roman: { [key: string]: number } = {
 };
 
 export function fromRoman(input:string): number{
-  let text = input.split('');
-  let numbers = text.map((x) => roman[x]) ;
+  const text = input.split('');
+  const numbers = text.map((x) => roman[x]) ;
   for (let i = 0; i < numbers.length; i++){
       if (numbers[i] < numbers[i+1]){
           numbers[i] = numbers[i+1] - numbers[i];
@@ -49,12 +49,12 @@ export function fromRoman(input:string): number{
 }
 
 export function toRoman(input:number): string{
-  let thousand = Math.floor(input / 1000);
-  let hundred = Math.floor((input - thousand*1000) / 100);
-  let ten = Math.floor((input - thousand*1000 - hundred*100) / 10);
-  let one = Math.floor((input - thousand*1000 - hundred*100 - ten*10));
+  const thousand = Math.floor(input / 1000);
+  const hundred = Math.floor((input - thousand*1000) / 100);
+  const ten = Math.floor((input - thousand*1000 - hundred*100) / 10);
+  const one = Math.floor((input - thousand*1000 - hundred*100 - ten*10));
  
-  let output=[];
+  const output=[];
   if(thousand > 3){
       return "Number too big. Not able to convert to Roman";
   }
@@ -179,8 +179,7 @@ switch (one) {
 }
 
 
- 
-let a = toRoman(2773); 
+
  
  
  

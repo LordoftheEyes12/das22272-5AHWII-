@@ -35,10 +35,3 @@ Deno.test(function toRoman_444() {
 
 
 
-/*
-3894 MMMDCCCXCIV
-3906 MMMCMVI
-3956 MMMCMLVI
-151 CLI
-444 CDXLIV
-*/
