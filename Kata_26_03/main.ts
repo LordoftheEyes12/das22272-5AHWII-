@@ -9,7 +9,6 @@ export class Value{
     const result = math.add(frac1 , frac2).toFraction().toString();
     if (result === "1") return new Value("1");
     const [z, n] = result.split("/").map(Number);
-    //[z,n] = [parseInt(z),parseInt(n)];
 
     if (z< n) return new Value(result);
     if (z% n === 0) return new Value(`${z/n}`);
